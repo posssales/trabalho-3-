@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Você decide o futuro da IA</title>
+
+    <style>
+
+        /* ==============================
+           CONFIGURAÇÕES GERAIS
+        ============================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+
+            background: #000a0f;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            color: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border-top: 3px solid #25d8f5;
+
+            padding: 20px;
+        }
+
+
+        /* ==============================
+           CONTAINER PRINCIPAL
+        ============================== */
+
+        .jogo {
+            width: 100%;
+            max-width: 1000px;
+
+            min-height: 90vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        /* ==============================
+           CARD
+        ============================== */
+
+        .card {
+            width: 320px;
+
+            background: #0d0c20;
+
+            border-radius: 8px;
+
+            padding: 25px 18px 18px;
+
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.35);
+
+            animation: aparecer 0.4s ease;
+        }
+
+
+        /* ==============================
+           TÍTULO
+        ============================== */
+
+        h1 {
+            color: #25d8f5;
+
+            font-size: 25px;
+
+            line-height: 1.05;
+
+            text-align: center;
+
+            margin-bottom: 18px;
+
+            font-weight: bold;
+        }
+
+
+        /* ==============================
+           INDICADOR DA ETAPA
+        ============================== */
+
+        .etapa {
+            text-align: center;
+
+            color: #6e7485;
+
+            font-size: 8px;
+
+            letter-spacing: 1.5px;
+
+            margin-bottom: 12px;
+        }
+
+
+        /* ==============================
+           TEXTO
+        ============================== */
+
+        .historia {
+            font-size: 9px;
+
+            line-height: 1.55;
+
+            text-align: center;
+
+            color: white;
+
+            margin-bottom: 15px;
+        }
+
+
+        /* ==============================
+           OPÇÕES
+        ============================== */
+
+        .opcoes {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+
+        .opcao {
+            width: 100%;
+
+            border: none;
+
+            border-radius: 5px;
+
+            padding: 10px 9px;
+
+            background: #242436;
+
+            color: white;
+
+            font-size: 8px;
+
+            line-height: 1.45;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .opcao:hover {
+            background: #303047;
+
+            transform: translateY(-1px);
+        }
+
+
+        .opcao.selecionada {
+            background: #25d8f5;
+
+            color: #001015;
+        }
+
+
+        .opcao.outra {
+            opacity: 0.45;
+        }
+
+
+        .opcao:disabled {
+            cursor: default;
+        }
+
+
+        /* ==============================
+           CONSEQUÊNCIA
+        ============================== */
+
+        .consequencia {
+            display: none;
+
+            margin-top: 14px;
+
+            padding-top: 13px;
+
+            border-top: 1px solid #252539;
+
+            animation: aparecer 0.4s ease;
+        }
+
+
+        .consequencia.ativa {
+            display: block;
+        }
+
+
+        .consequencia h2 {
+            color: #25d8f5;
+
+            text-align: center;
+
+            font-size: 10px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .consequencia p {
+            color: white;
+
+            text-align: center;
+
+            font-size: 8px;
+
+            line-height: 1.5;
+
+            margin-bottom: 10px;
+        }
+
+
+        /* ==============================
+           BOTÃO CONTINUAR
+        ============================== */
+
+        .continuar {
+            width: 100%;
+
+            border: none;
+
+            border-radius: 5px;
+
+            padding: 10px;
+
+            background: #25d8f5;
+
+            color: #001015;
+
+            font-size: 8px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .continuar:hover {
+            background: #54e4fa;
+
+            transform: translateY(-1px);
+        }
+
+
+        /* ==============================
+           RESULTADO FINAL
+        ============================== */
+
+        .final {
+            text-align: center;
+        }
+
+
+        .final-icon {
+            width: 45px;
+
+            height: 45px;
+
+            margin: 0 auto 12px;
+
+            border-radius: 50%;
+
+            background: #15152a;
+
+            color: #25d8f5;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 25px;
+        }
+
+
+        .final h2 {
+            color: #25d8f5;
+
+            font-size: 14px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .texto-final {
+            font-size: 9px;
+
+            line-height: 1.6;
+
+            text-align: center;
+
+            margin-bottom: 15px;
+        }
+
+
+        /* ==============================
+           REGISTRO DAS ESCOLHAS
+        ============================== */
+
+        .registro {
+            background: #15152a;
+
+            border-radius: 5px;
+
+            padding: 10px;
+
+            margin-bottom: 13px;
+
+            text-align: left;
+        }
+
+
+        .registro h3 {
+            color: #25d8f5;
+
+            text-align: center;
+
+            font-size: 9px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .escolha {
+            padding: 6px 0;
+
+            border-bottom: 1px solid #29293d;
+        }
+
+
+        .escolha:last-child {
+            border-bottom: none;
+        }
+
+
+        .numero {
+            display: block;
+
+            color: #25d8f5;
+
+            font-size: 7px;
+
+            margin-bottom: 2px;
+        }
+
+
+        .texto-escolha {
+            display: block;
+
+            color: white;
+
+            font-size: 7px;
+
+            line-height: 1.4;
+        }
+
+
+        /* ==============================
+           BOTÃO JOGAR NOVAMENTE
+        ============================== */
+
+        .reiniciar {
+            width: 100%;
+
+            border: none;
+
+            border-radius: 5px;
+
+            padding: 10px;
+
+            background: #25d8f5;
+
+            color: #001015;
+
+            font-size: 8px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .reiniciar:hover {
+            background: #54e4fa;
+
+            transform: translateY(-1px);
+        }
+
+
+        /* ==============================
+           ESCONDER
+        ============================== */
+
+        .escondido {
+            display: none;
+        }
+
+
+        /* ==============================
+           ANIMAÇÕES
+        ============================== */
+
+        @keyframes aparecer {
+
+            from {
+                opacity: 0;
+
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform: translateY(0);
+            }
+
+        }
+
+
+        /* ==============================
+           RESPONSIVIDADE
+        ============================== */
+
+        @media (max-width: 500px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .card {
+                width: 100%;
+
+                max-width: 320px;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <main class="jogo">
+
+
+        <!-- =================================
+             CARD DA MISSÃO
+        ================================== -->
+
+        <section class="card" id="missao">
+
+
+            <h1>
+                Você decide o<br>
+                futuro da IA
+            </h1>
+
+
+            <div class="etapa" id="etapa">
+                ETAPA 1 DE 4
+            </div>
+
+
+            <p class="historia" id="historia">
+            </p>
+
+
+            <div class="opcoes" id="opcoes">
+            </div>
+
+
+            <!-- CONSEQUÊNCIA -->
+
+            <div class="consequencia" id="consequencia">
+
+                <h2 id="tituloConsequencia">
+                    Sua escolha teve uma consequência
+                </h2>
+
+                <p id="textoConsequencia">
+                </p>
+
+                <button
+                    class="continuar"
+                    id="continuar">
+                    Continuar
+                </button>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================
+             RESULTADO FINAL
+        ================================== -->
+
+        <section
+            class="card final escondido"
+            id="resultado">
+
+
+            <h1>
+                Você decide o<br>
+                futuro da IA
+            </h1>
+
+
+            <div class="final-icon">
+                ✦
+            </div>
+
+
+            <h2 id="tituloFinal">
+            </h2>
+
+
+            <p
+                class="texto-final"
+                id="textoFinal">
+            </p>
+
+
+            <!-- REGISTRO -->
+
+            <div class="registro">
+
+                <h3>
+                    SUAS ESCOLHAS
+                </h3>
+
+                <div id="listaEscolhas">
+                </div>
+
+            </div>
+
+
+            <button
+                class="reiniciar"
+                id="reiniciar">
+
+                Jogar novamente
+
+            </button>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <script>
+
+        /* ==========================================
+           DADOS DA MISSÃO
+        ========================================== */
+
+
+        const etapas = [
+
+            /* ===============================
+               ETAPA 1
+            =============================== */
+
+            {
+
+                historia:
+                    "Assim que saiu da escola, Gabriel se depara com uma nova tecnologia: um chat que consegue responder todas as dúvidas que uma pessoa pode ter. O chat também gera imagens e áudios hiper-realistas. Qual é o primeiro pensamento de Gabriel?",
+
+                opcoes: [
+
+                    {
+
+                        texto:
+                            "Isso é assustador!",
+
+                        consequencia:
+                            "Gabriel fica preocupado com o poder dessa tecnologia. Ele percebe que ferramentas tão avançadas precisam ser utilizadas com responsabilidade.",
+
+                        perfil:
+                            "cauteloso"
+
+                    },
+
+                    {
+
+                        texto:
+                            "Isso é maravilhoso!",
+
+                        consequencia:
+                            "Gabriel fica curioso com as possibilidades. Ele imagina como essa tecnologia poderia ajudar pessoas a aprender, criar e resolver problemas.",
+
+                        perfil:
+                            "entusiasmado"
+
+                    }
+
+                ]
+
+            },
+
+
+            /* ===============================
+               ETAPA 2
+            =============================== */
+
+            {
+
+                historia:
+                    "Com a descoberta desta tecnologia, uma professora de tecnologia decide fazer uma sequência de aulas sobre IA. No fim de uma aula, ela pede que Gabriel escreva um trabalho sobre o uso da tecnologia em sala de aula. Qual atitude Gabriel toma?",
+
+                opcoes: [
+
+                    {
+
+                        texto:
+                            "Utiliza uma ferramenta de busca na internet que utiliza IA para encontrar informações relevantes e explica o conteúdo de uma forma que facilite o entendimento.",
+
+                        consequencia:
+                            "Gabriel descobre que a IA pode ser uma ferramenta de apoio aos estudos. Ele entende, porém, que precisa conferir as informações e desenvolver suas próprias ideias.",
+
+                        perfil:
+                            "pesquisador"
+
+                    },
+
+                    {
+
+                        texto:
+                            "Escreve o trabalho com base nas conversas que teve com colegas, algumas pesquisas na internet e conhecimentos próprios sobre o tema.",
+
+                        consequencia:
+                            "Gabriel decide pesquisar por conta própria e comparar diferentes fontes. Assim, percebe que existem várias formas de aprender sobre um mesmo assunto.",
+
+                        perfil:
+                            "independente"
+
+                    }
+
+                ]
+
+            },
+
+
+            /* ===============================
+               ETAPA 3
+            =============================== */
+
+            {
+
+                historia:
+                    "Depois que Gabriel escreveu o trabalho, teve uma discussão sobre o impacto da IA no trabalho do futuro. O que Gabriel faz?",
+
+                opcoes: [
+
+                    {
+
+                        texto:
+                            "Defende a ideia de que a IA pode criar novas oportunidades de emprego e melhorar habilidades humanas.",
+
+                        consequencia:
+                            "Gabriel passa a imaginar um futuro no qual humanos e máquinas trabalham juntos. Para ele, aprender a utilizar novas tecnologias será uma habilidade importante.",
+
+                        perfil:
+                            "otimista"
+
+                    },
+
+                    {
+
+                        texto:
+                            "Fica preocupado com as pessoas que perderão seus empregos para máquinas e defende a importância de proteger os trabalhadores.",
+
+                        consequencia:
+                            "Gabriel percebe que a evolução tecnológica também pode trazer desafios. Ele acredita que as pessoas precisam ter oportunidades para aprender novas habilidades.",
+
+                        perfil:
+                            "preocupado"
+
+                    }
+
+                ]
+
+            },
+
+
+            /* ===============================
+               ETAPA 4
+            =============================== */
+
+            {
+
+                historia:
+                    "Ao final da discussão, Gabriel precisa criar uma imagem no computador que represente o que pensa sobre IA. E agora?",
+
+                opcoes: [
+
+                    {
+
+                        texto:
+                            "Cria uma imagem utilizando um gerador de imagem de IA.",
+
+                        consequencia:
+                            "Gabriel experimenta uma ferramenta de IA para transformar uma ideia em imagem. Ele percebe que saber criar bons comandos também é uma forma de expressão.",
+
+                        perfil:
+                            "criativo"
+
+                    },
+
+                    {
+
+                        texto:
+                            "Cria uma imagem utilizando uma plataforma de design como o Paint.",
+
+                        consequencia:
+                            "Gabriel decide construir a imagem manualmente. Ele percebe que ferramentas tradicionais continuam sendo úteis e que a tecnologia não substitui todas as formas de criação.",
+
+                        perfil:
+                            "tradicional"
+
+                    }
+
+                ]
+
+            }
+
+        ];
+
+
+        /* ==========================================
+           VARIÁVEIS
+        ========================================== */
+
+
+        let etapaAtual = 0;
+
+        let escolhas = [];
+
+        let escolhaFeita = false;
+
+
+        /* ==========================================
+           ELEMENTOS HTML
+        ========================================== */
+
+
+        const historia =
+            document.getElementById("historia");
+
+        const opcoes =
+            document.getElementById("opcoes");
+
+        const etapa =
+            document.getElementById("etapa");
+
+        const consequencia =
+            document.getElementById("consequencia");
+
+        const textoConsequencia =
+            document.getElementById("textoConsequencia");
+
+        const continuar =
+            document.getElementById("continuar");
+
+        const missao =
+            document.getElementById("missao");
+
+        const resultado =
+            document.getElementById("resultado");
+
+        const tituloFinal =
+            document.getElementById("tituloFinal");
+
+        const textoFinal =
+            document.getElementById("textoFinal");
+
+        const listaEscolhas =
+            document.getElementById("listaEscolhas");
+
+        const reiniciar =
+            document.getElementById("reiniciar");
+
+
+        /* ==========================================
+           CARREGAR ETAPA
+        ========================================== */
+
+
+        function carregarEtapa() {
+
+            const dados =
+                etapas[etapaAtual];
+
+
+            escolhaFeita = false;
+
+
+            etapa.textContent =
+                `ETAPA ${etapaAtual + 1} DE ${etapas.length}`;
+
+
+            historia.textContent =
+                dados.historia;
+
+
+            opcoes.innerHTML = "";
+
+
+            consequencia.classList.remove(
+                "ativa"
+            );
+
+
+            dados.opcoes.forEach(
+                (opcao, indice) => {
+
+
+                    const botao =
+                        document.createElement("button");
+
+
+                    botao.className =
+                        "opcao";
+
+
+                    botao.textContent =
+                        opcao.texto;
+
+
+                    botao.onclick = function () {
+
+                        selecionarOpcao(
+                            indice,
+                            botao
+                        );
+
+                    };
+
+
+                    opcoes.appendChild(
+                        botao
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* ==========================================
+           SELECIONAR OPÇÃO
+        ========================================== */
+
+
+        function selecionarOpcao(
+            indice,
+            botaoSelecionado
+        ) {
+
+
+            if (escolhaFeita) {
+
+                return;
+
+            }
+
+
+            escolhaFeita = true;
+
+
+            const dados =
+                etapas[etapaAtual];
+
+
+            const escolha =
+                dados.opcoes[indice];
+
+
+            /* ============================
+               DESABILITA OS BOTÕES
+            ============================ */
+
+
+            const botoes =
+                document.querySelectorAll(
+                    ".opcao"
+                );
+
+
+            botoes.forEach(
+                (botao, index) => {
+
+                    botao.disabled = true;
+
+
+                    if (
+                        index !== indice
+                    ) {
+
+                        botao.classList.add(
+                            "outra"
+                        );
+
+                    }
+
+                }
+            );
+
+
+            /* ============================
+               DESTACA ESCOLHA
+            ============================ */
+
+
+            botaoSelecionado.classList.add(
+                "selecionada"
+            );
+
+
+            /* ============================
+               REGISTRA A ESCOLHA
+            ============================ */
+
+
+            escolhas.push({
+
+                etapa:
+                    etapaAtual + 1,
+
+                texto:
+                    escolha.texto,
+
+                perfil:
+                    escolha.perfil,
+
+                consequencia:
+                    escolha.consequencia
+
+            });
+
+
+            /* ============================
+               MOSTRA CONSEQUÊNCIA
+            ============================ */
+
+
+            textoConsequencia.textContent =
+                escolha.consequencia;
+
+
+            consequencia.classList.add(
+                "ativa"
+            );
+
+
+            if (
+                etapaAtual ===
+                etapas.length - 1
+            ) {
+
+                continuar.textContent =
+                    "Ver resultado";
+
+            } else {
+
+                continuar.textContent =
+                    "Continuar";
+
+            }
+
+        }
+
+
+        /* ==========================================
+           BOTÃO CONTINUAR
+        ========================================== */
+
+
+        continuar.onclick = function () {
+
+
+            if (!escolhaFeita) {
+
+                return;
+
+            }
+
+
+            if (
+                etapaAtual <
+                etapas.length - 1
+            ) {
+
+
+                etapaAtual++;
+
+
+                carregarEtapa();
+
+
+            } else {
+
+
+                mostrarResultado();
+
+            }
+
+        };
+
+
+        /* ==========================================
+           MOSTRAR RESULTADO
+        ========================================== */
+
+
+        function mostrarResultado() {
+
+
+            missao.classList.add(
+                "escondido"
+            );
+
+
+            resultado.classList.remove(
+                "escondido"
+            );
+
+
+            gerarResultado();
+
+
+            mostrarHistorico();
+
+        }
+
+
+        /* ==========================================
+           GERAR FINAL PERSONALIZADO
+        ========================================== */
+
+
+        function gerarResultado() {
+
+
+            const perfis =
+                escolhas.map(
+                    escolha =>
+                        escolha.perfil
+                );
+
+
+            let titulo =
+                "O futuro está nas suas mãos!";
+
+
+            let texto =
+                "Gabriel descobriu que a inteligência artificial pode transformar a maneira como aprendemos, criamos e trabalhamos. Mais importante do que aceitar ou rejeitar a tecnologia é aprender a utilizá-la de forma consciente.";
+
+
+            /* ============================
+               FINAL 1
+            ============================ */
+
+
+            if (
+                perfis.includes("cauteloso") &&
+                perfis.includes("preocupado")
+            ) {
+
+                titulo =
+                    "Um futuro com responsabilidade!";
+
+
+                texto =
+                    "Suas escolhas mostram uma visão cuidadosa sobre a inteligência artificial. Você reconhece que a tecnologia pode trazer oportunidades, mas também acredita que seus impactos precisam ser analisados. Para você, o futuro da IA deve caminhar junto com responsabilidade, ética e cuidado com as pessoas.";
+
+            }
+
+
+            /* ============================
+               FINAL 2
+            ============================ */
+
+
+            else if (
+                perfis.includes("entusiasmado") &&
+                perfis.includes("otimista")
+            ) {
+
+                titulo =
+                    "Um futuro cheio de possibilidades!";
+
+
+                texto =
+                    "Suas escolhas mostram entusiasmo pelas possibilidades da inteligência artificial. Você acredita que a tecnologia pode ajudar as pessoas a aprender, criar e desenvolver novas habilidades. Para você, o desafio é descobrir como utilizar essas possibilidades de maneira consciente.";
+
+            }
+
+
+            /* ============================
+               FINAL 3
+            ============================ */
+
+
+            else if (
+                perfis.includes("pesquisador") &&
+                perfis.includes("criativo")
+            ) {
+
+                titulo =
+                    "Você usa a IA para aprender e criar!";
+
+
+                texto =
+                    "Suas escolhas mostram uma postura investigativa e criativa. Você percebe que a inteligência artificial pode ser uma ferramenta poderosa para pesquisar informações e transformar ideias em novas criações. Ao mesmo tempo, entende que é importante analisar as informações antes de utilizá-las.";
+
+            }
+
+
+            /* ============================
+               FINAL 4
+            ============================ */
+
+
+            else if (
+                perfis.includes("independente") &&
+                perfis.includes("tradicional")
+            ) {
+
+                titulo =
+                    "A tecnologia é uma ferramenta!";
+
+
+                texto =
+                    "Suas escolhas mostram que você valoriza a autonomia e as formas tradicionais de criação. A inteligência artificial pode fazer parte do processo, mas não precisa substituir todas as ferramentas que já conhecemos. O mais importante é escolher a ferramenta adequada para cada situação.";
+
+            }
+
+
+            /* ============================
+               FINAL 5
+            ============================ */
+
+
+            else if (
+                perfis.includes("criativo") ||
+                perfis.includes("otimista")
+            ) {
+
+                titulo =
+                    "Você vê novas possibilidades!";
+
+
+                texto =
+                    "Suas escolhas mostram curiosidade e disposição para experimentar. Você percebe que a IA pode abrir novos caminhos para aprender, criar e resolver problemas. Porém, também é importante desenvolver pensamento crítico para utilizar essas ferramentas.";
+
+            }
+
+
+            tituloFinal.textContent =
+                titulo;
+
+
+            textoFinal.textContent =
+                texto;
+
+        }
+
+
+        /* ==========================================
+           MOSTRAR HISTÓRICO
+        ========================================== */
+
+
+        function mostrarHistorico() {
+
+
+            listaEscolhas.innerHTML = "";
+
+
+            escolhas.forEach(
+                (escolha) => {
+
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    div.className =
+                        "escolha";
+
+
+                    div.innerHTML = `
+
+                        <span class="numero">
+                            ETAPA ${escolha.etapa}
+                        </span>
+
+                        <span class="texto-escolha">
+                            ${escolha.texto}
+                        </span>
+
+                    `;
+
+
+                    listaEscolhas.appendChild(
+                        div
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* ==========================================
+           JOGAR NOVAMENTE
+        ========================================== */
+
+
+        reiniciar.onclick = function () {
+
+
+            etapaAtual = 0;
+
+
+            escolhas = [];
+
+
+            escolhaFeita = false;
+
+
+            resultado.classList.add(
+                "escondido"
+            );
+
+
+            missao.classList.remove(
+                "escondido"
+            );
+
+
+            carregarEtapa();
+
+        };
+
+
+        /* ==========================================
+           INICIAR MISSÃO
+        ========================================== */
+
+
+        carregarEtapa();
+
+    </script>
+
+</body>
+
+</html>
